@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewData["Title"] - CryptoXchange</title>
+    <meta property="og:title" content="The profitable and reliable Betchip mining pool with competitive fees, server locations accross the globe and beginner-friendly support." />
+    <meta name="twitter:card" content="The profitable and reliable Betchip mining pool with competitive fees, server locations accross the globe and beginner-friendly support.">
+    <meta name="description" content="The profitable and reliable Betchip mining pool with competitive fees, server locations accross the globe and beginner-friendly support." />
+    <meta name="og:description" content="The profitable and reliable Betchip mining pool with competitive fees, server locations accross the globe and beginner-friendly support." />
+    <meta itemprop="description" content="The profitable and reliable Betchip mining pool with competitive fees, server locations accross the globe and beginner-friendly support.">
+    <meta name="twitter:description" content="The profitable and reliable Betchip mining pool with competitive fees, server locations accross the globe and beginner-friendly support.">
+    <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel='stylesheet' href='//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' />
+    <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Lato|Open+Sans|Cousine|Ubuntu:400,500,700' />
+    <environment include="Development">
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">CryptoXchange</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar1" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar1">
+            <ul class="navbar-nav ml-auto">
+
+                <li class="nav-item active">
+                    <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="About" class="nav-link">About</a></li>
+                <li class="nav-item">
+                    <a class="btn ml-2 btn-warning" data-toggle="modal" data-target="#dlgExchangeConfirm">Exchange</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    @RenderBody()
+    <footer class="section-footer bg-dark white">
+        <div class="container">
+            <p class="text-center">
+                Copyright © 2018 - CryptoXchange
+            </p>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal fade" id="dlgExchangeConfirm" tabindex="-1" role="dialog" aria-labelledby="dlgExchangeConfirmLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dlgExchangeConfirmLabel">Transfer Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <fieldset>
+                            <p>
+                                <label for="txtFundingAddress">Fund the following Bitcoin address (BTC)</label>
+                                <input type="text" id="txtFundingAddress" placeholder="BTC" readonly="readonly" class="form-control">
+                            </p>
+                            <p class="text-center">
+                                <img id="imgFundingAddress" width="200" height="200" title="Fund this Bitcoin address (BTC)"/>
+                            </p>
+                            <p>
+                                <label for="txtReceivingAddress">Enter your receiving Betchip address (BTP)</label>
+                                <input type="text" id="txtReceivingAddress" placeholder="BTP" class="form-control">
+                            </p>
+                        </fieldset>
+                    </form>
+                    <p class="small">In order to transfer, all deposits less than 1.0 BTC must have at least 1 confirmation, between 1.0 and 10.0 BTC will require 2 confirmations, between 10.0 and 50.0 BTC will require 4 confirmations and any deposits over 50.0 BTC will require 6 confirmations.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnConfirmTransfer"><i class="fas fa-exchange-alt"></i>Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*<script src="//code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>*@
+    <script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
+    <environment include="Development">
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
