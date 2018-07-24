@@ -17,6 +17,8 @@ using CryptoXchange.Configuration;
 using CryptoXchange.Extensions;
 using CryptoXchange.Payments;
 using CryptoXchange.Scheduler;
+using System.Collections.Generic;
+using System.Reactive.Linq;
 
 namespace CryptoXchange.Services
 {
@@ -30,6 +32,7 @@ namespace CryptoXchange.Services
         private readonly DaemonClientFactory _daemonClientFactory;
         private readonly PayoutManager _payoutManager;
         private readonly IJobManager _jobManager;
+        private DateTime _lastUpdated;
 
         public ExchangeService(IContextHolder contextHolder, 
             ITransferRequestRepository iTransferRequestRepository, 
@@ -47,6 +50,45 @@ namespace CryptoXchange.Services
             _payoutManager = payoutManager;
             _jobManager = jobManager;
             _qrService = new QRCodeGenerator();
+
+            /*DaemonClient coinClient = _daemonClientFactory.GetDaemonClient(CoinType.BTC);
+            if (null != coinClient)
+            {
+                Dictionary<DaemonEndpointConfig, (string Socket, string Topic)> portMap = new Dictionary<DaemonEndpointConfig, (string Socket, string Topic)>();
+
+                DaemonEndpointConfig endpointConfig = new DaemonEndpointConfig();
+                var zmq = (Socket: "tcp://127.0.0.1:28332", Topic: "hashtx");
+                portMap[endpointConfig] = zmq;
+
+                var subject = coinClient.ZmqSubscribe(portMap, 2)
+                    .Select(frames =>
+                    {
+                        // We just take the second frame's raw data and turn it into a hex string.
+                        // If that string changes, we got an update (DistinctUntilChanged)
+                        var result = frames[1].ToHexString();
+                        frames.Dispose();
+                        return result;
+                    })
+                    .DistinctUntilChanged();
+
+                subject.Subscribe(OnHashTxReceived,OnHashTxError);
+            }*/
+        }
+
+        private void OnHashTxReceived(string tx)
+        {
+            //Need to slow it down a bit
+            if (_lastUpdated.AddSeconds(5) < DateTime.Now)
+            {
+                _lastUpdated = DateTime.Now;
+                _payoutManager.ProcessTransferRequests();
+                _lastUpdated = DateTime.Now;
+            }
+        }
+
+        private void OnHashTxError()
+        {
+            _logger.Error("Error reading ZMQ:hashtx");
         }
 
         internal ServiceResponse<TransferModel> GetTransferRequestForSymbol(string symbol)
@@ -123,10 +165,10 @@ namespace CryptoXchange.Services
                     };
 
                     _iConnectionFactory.Run(con => _iTransferRequestRepository.Add(con, null, transfer));
-
+                    //https://stackoverflow.com/questions/47487241/rawtx-rawblock-zmq-at-the-same-time
                     _jobManager.Add(new Trigger
                     {
-                        StartTime = DateTime.Now.AddSeconds(20),
+                        StartTime = DateTime.Now.AddSeconds(25),
                         TaskAction = () =>
                         {
                             _payoutManager.ProcessTransferRequests(new TransferRequest[] { transfer });

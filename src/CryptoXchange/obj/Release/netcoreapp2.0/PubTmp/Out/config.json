@@ -1,0 +1,55 @@
+﻿{
+  "exchangeName": "BTPCX",
+  "logging": {
+    "level": "info",
+    "enableConsoleLog": true,
+    "enableConsoleColors": true,
+    "logFile": "",
+    "logBaseDirectory": "",
+    "perPoolLogFile": false
+  },
+  "notifications": {
+    "enabled": true,
+    "slackNotifications": {
+      "enabled": true,
+      "webHookUrl": "https://discordapp.com/api/webhooks/469242261918449675/dgLDE7vNg7kF-P18yJ-91jZ-1gkDs5njA99NQlfqXv0xk7z0VqjPEqXGVfDCfHPJt1yN",
+      "blockFoundUsername": "lexa044",
+      "blockFoundEmoji": "https://i.imgur.com/mdp3NY3.png"
+    }
+  },
+  "persistence": {
+    "postgres": {
+      "host": "127.0.0.1",
+      "port": 5432,
+      "user": "xchange",
+      "password": "some-secure-password",
+      "database": "xchange"
+    }
+  },
+  "coins": [
+    {
+      "type": "BTC",
+      "algorithm": "sha256d",
+      "daemons": [
+        {
+          "host": "127.0.0.1",
+          "port": 18332,
+          "user": "betchiprpc",
+          "password": "HsdkFvxaLn55xS7vrtCWsr2LS9zbiMgY1WHrAMwuTdVG"
+        }
+      ]
+    },
+    {
+      "type": "BTP",
+      "algorithm": "sha256d",
+      "daemons": [
+        {
+          "host": "127.0.0.1",
+          "port": 9443,
+          "user": "betchiprpc",
+          "password": "HsdkFvxaLn55xS7vrtCWsr2LS9zbiMgY1WHrAMwuTdVG"
+        }
+      ]
+    }
+  ]
+}

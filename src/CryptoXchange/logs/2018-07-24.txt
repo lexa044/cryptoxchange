@@ -1,0 +1,9 @@
+DEBUG2018-07-24 12:36:50 – Executing Payout Manager.
+DEBUG2018-07-24 12:36:52 – Subscribed to tcp://127.0.0.1:28332/hashtx
+DEBUG2018-07-24 12:36:53 – Executing Payout Manager.
+DEBUG2018-07-24 12:36:59 – Executing Payout Manager.
+DEBUG2018-07-24 12:37:05 – Executing Payout Manager.
+DEBUG2018-07-24 12:37:13 – Executing Payout Manager.
+DEBUG2018-07-24 12:37:18 – Executing Payout Manager.
+DEBUG2018-07-24 12:37:27 – Executing Payout Manager.
+DEBUG2018-07-24 12:37:33 – Executing Payout Manager.

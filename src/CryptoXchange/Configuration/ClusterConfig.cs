@@ -51,6 +51,7 @@ namespace CryptoXchange.Configuration
         public string WalletPassword { get; set; }
 
         public DaemonEndpointConfig[] Daemons { get; set; }
+        public ZmqPubSubEndpointConfig[] ZmqTopics { get; set; }
         public int TransferRefreshInterval { get; set; }
     }
 
@@ -74,6 +75,12 @@ namespace CryptoXchange.Configuration
     {
         public string User { get; set; }
         public string Password { get; set; }
+    }
+
+    public class ZmqPubSubEndpointConfig
+    {
+        public string Url { get; set; }
+        public string Topic { get; set; }
     }
 
     public class DaemonEndpointConfig : AuthenticatedNetworkEndpointConfig

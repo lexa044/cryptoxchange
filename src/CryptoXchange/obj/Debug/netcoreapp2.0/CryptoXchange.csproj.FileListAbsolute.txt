@@ -1,0 +1,11 @@
+D:\repo\github\CryptoXchange\src\CryptoXchange\bin\Debug\netcoreapp2.0\CryptoXchange.deps.json
+D:\repo\github\CryptoXchange\src\CryptoXchange\bin\Debug\netcoreapp2.0\CryptoXchange.runtimeconfig.json
+D:\repo\github\CryptoXchange\src\CryptoXchange\bin\Debug\netcoreapp2.0\CryptoXchange.runtimeconfig.dev.json
+D:\repo\github\CryptoXchange\src\CryptoXchange\bin\Debug\netcoreapp2.0\CryptoXchange.dll
+D:\repo\github\CryptoXchange\src\CryptoXchange\bin\Debug\netcoreapp2.0\CryptoXchange.pdb
+D:\repo\github\CryptoXchange\src\CryptoXchange\obj\Debug\netcoreapp2.0\CryptoXchange.csprojAssemblyReference.cache
+D:\repo\github\CryptoXchange\src\CryptoXchange\obj\Debug\netcoreapp2.0\CryptoXchange.csproj.CoreCompileInputs.cache
+D:\repo\github\CryptoXchange\src\CryptoXchange\obj\Debug\netcoreapp2.0\CryptoXchange.AssemblyInfoInputs.cache
+D:\repo\github\CryptoXchange\src\CryptoXchange\obj\Debug\netcoreapp2.0\CryptoXchange.AssemblyInfo.cs
+D:\repo\github\CryptoXchange\src\CryptoXchange\obj\Debug\netcoreapp2.0\CryptoXchange.dll
+D:\repo\github\CryptoXchange\src\CryptoXchange\obj\Debug\netcoreapp2.0\CryptoXchange.pdb

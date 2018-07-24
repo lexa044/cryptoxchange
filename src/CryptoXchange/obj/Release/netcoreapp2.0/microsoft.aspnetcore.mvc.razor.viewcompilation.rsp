@@ -1,0 +1,12 @@
+D:\repo\github\CryptoXchange\src\CryptoXchange
+--output-path=obj\Release\netcoreapp2.0\
+--application-name=CryptoXchange
+--content-root=D:\repo\github\CryptoXchange\src\CryptoXchange
+--file=D:\repo\github\CryptoXchange\src\CryptoXchange\Views\Home\About.cshtml
+--file=D:\repo\github\CryptoXchange\src\CryptoXchange\Views\Home\Contact.cshtml
+--file=D:\repo\github\CryptoXchange\src\CryptoXchange\Views\Home\Index.cshtml
+--file=D:\repo\github\CryptoXchange\src\CryptoXchange\Views\Shared\Error.cshtml
+--file=D:\repo\github\CryptoXchange\src\CryptoXchange\Views\Shared\_Layout.cshtml
+--file=D:\repo\github\CryptoXchange\src\CryptoXchange\Views\Shared\_ValidationScriptsPartial.cshtml
+--file=D:\repo\github\CryptoXchange\src\CryptoXchange\Views\_ViewImports.cshtml
+--file=D:\repo\github\CryptoXchange\src\CryptoXchange\Views\_ViewStart.cshtml

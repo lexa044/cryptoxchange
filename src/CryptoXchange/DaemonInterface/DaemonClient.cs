@@ -1,24 +1,33 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
+using NetMQ.Sockets;
+using NetMQ;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 using CryptoXchange.Configuration;
 using CryptoXchange.JsonRpc;
 using CryptoXchange.Util;
+using CryptoXchange.Buffers;
 
 namespace CryptoXchange.DaemonInterface
 {
     public class DaemonClient
     {
+        protected static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(typeof(DaemonClient));
+
         public DaemonClient(JsonSerializerSettings serializerSettings, string walletPassword)
         {
             this.serializerSettings = serializerSettings;
@@ -167,6 +176,14 @@ namespace CryptoXchange.DaemonInterface
             var taskFirstCompleted = await Task.WhenAny(tasks);
             var result = MapDaemonBatchResponse(0, taskFirstCompleted);
             return result;
+        }
+
+        public IObservable<PooledArraySegment<byte>[]> ZmqSubscribe(Dictionary<DaemonEndpointConfig, (string Socket, string Topic)> portMap, int numMsgSegments = 2)
+        {
+            return Observable.Merge(portMap.Keys
+                    .Select(endPoint => ZmqSubscribeEndpoint(portMap[endPoint].Socket, portMap[endPoint].Topic, numMsgSegments)))
+                .Publish()
+                .RefCount();
         }
         #endregion // API-Surface
 
@@ -340,5 +357,61 @@ namespace CryptoXchange.DaemonInterface
             }).ToArray();
         }
 
+        private IObservable<PooledArraySegment<byte>[]> ZmqSubscribeEndpoint(string url, string topic, int numMsgSegments = 2)
+        {
+            return Observable.Defer(() => Observable.Create<PooledArraySegment<byte>[]>(obs =>
+            {
+                var tcs = new CancellationTokenSource();
+
+                Task.Factory.StartNew(() =>
+                {
+                    using (tcs)
+                    {
+                        while (!tcs.IsCancellationRequested)
+                        {
+                            try
+                            {
+                                using (var subSocket = new SubscriberSocket())
+                                {
+                                    //subSocket.Options.ReceiveHighWatermark = 1000;
+                                    subSocket.Connect(url);
+                                    subSocket.Subscribe(topic);
+
+                                    _logger.Debug($"Subscribed to {url}/{topic}");
+
+                                    while (!tcs.IsCancellationRequested)
+                                    {
+                                        var msg = subSocket.ReceiveMultipartMessage(numMsgSegments);
+
+                                        // Export all frame data as array of PooledArraySegments
+                                        var result = msg.Select(x =>
+                                        {
+                                            var buf = ArrayPool<byte>.Shared.Rent(x.BufferSize);
+                                            Array.Copy(x.ToByteArray(), buf, x.BufferSize);
+                                            return new PooledArraySegment<byte>(buf, 0, x.BufferSize);
+                                        }).ToArray();
+
+                                        obs.OnNext(result);
+                                    }
+                                }
+                            }
+
+                            catch (Exception ex)
+                            {
+                                _logger.Error(ex);
+                            }
+
+                            // do not consume all CPU cycles in case of a long lasting error condition
+                            Thread.Sleep(1000);
+                        }
+                    }
+                }, tcs.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+
+                return Disposable.Create(() =>
+                {
+                    tcs.Cancel();
+                });
+            }));
+        }
     }
 }

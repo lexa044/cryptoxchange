@@ -79,11 +79,6 @@ namespace CryptoXchange.Payments
                     LastExecuted = DateTime.Now;
                     _jobManager.Add(this);
                 }
-                else
-                {
-                    LastExecuted = LastExecuted.AddSeconds(30);
-                    _jobManager.Add(this);
-                }
             }
             catch (Exception ex)
             {
@@ -100,7 +95,7 @@ namespace CryptoXchange.Payments
             InternalProcessTransferRequests(requests);
         }
 
-        private void ProcessTransferRequests()
+        public void ProcessTransferRequests()
         {
             TransferRequest[] requests = _iConnectionFactory.Run(con => _iTransferRequestRepository.GetPendingRequestsForCoin(con, CoinType.BTC.ToString()));
 
@@ -112,6 +107,7 @@ namespace CryptoXchange.Payments
             if (!_updatingThroughput)
             {
                 _updatingThroughput = true;
+                _logger.Debug("Executing Payout Manager.");
 
                 if (null != requests && requests.Length > 0)
                 {
