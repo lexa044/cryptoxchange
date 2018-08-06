@@ -18,6 +18,7 @@ using CryptoXchange.Persistence;
 using CryptoXchange.Persistence.Postgres;
 using CryptoXchange.Persistence.Repositories;
 using CryptoXchange.Notifications;
+using System.Linq;
 
 namespace CryptoXchange
 {
@@ -68,6 +69,11 @@ namespace CryptoXchange
             });
             services.AddSingleton<PayoutManager>(payoutManager);
             services.RegisterServices();
+
+            // Add cors
+            services.AddCors();
+
+            // Add framework services.
             services.AddMvc();
         }
 
@@ -86,7 +92,19 @@ namespace CryptoXchange
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions()
             {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+                ForwardedHeaders = ForwardedHeaders.All
+            });
+
+            // Patch path base with forwarded path
+            app.Use(async (context, next) =>
+            {
+                var forwardedPath = context.Request.Headers["X-Forwarded-Path"].FirstOrDefault();
+                if (!string.IsNullOrEmpty(forwardedPath))
+                {
+                    context.Request.PathBase = forwardedPath;
+                }
+
+                await next();
             });
 
             app.UseStaticFiles();

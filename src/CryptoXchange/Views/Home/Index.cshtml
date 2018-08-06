@@ -57,32 +57,11 @@
                 </form>
                 <br />
                 <p class="small">In order to transfer, all deposits less than 1.0 BTC must have at least 1 confirmation, between 1.0 and 10.0 BTC will require 2 confirmations, between 10.0 and 50.0 BTC will require 4 confirmations and any deposits over 50.0 BTC will require 6 confirmations.</p>
-                <ul class="list-inline my-5">
-                    <li class="list-inline-item">
-                        <a class="h4 text-light p-2" href="#">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a class="h4 text-light p-2" href="#">
-                            <i class="fab fa-facebook"></i>
-                        </a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a class="h4 text-light p-2" href="#">
-                            <i class="fab fa-dribbble"></i>
-                        </a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a class="h4 text-light p-2" href="#">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                    </li>
-                </ul>
             </div>
         </div>
     </div>
 </section>
+<script src="~/js/site.js" asp-append-version="true"></script>
 @section scripts{
 <script>
         ExchangeService.init("#txtBTCAmount", "#txtBTPAmount", @(currentExchange));
