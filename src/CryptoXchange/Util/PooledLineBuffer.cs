@@ -20,7 +20,7 @@ namespace CryptoXchange.Util
         }
 
         private readonly Queue<PooledArraySegment<byte>> recvQueue = new Queue<PooledArraySegment<byte>>();
-        private readonly ILogger logger;
+        //private readonly ILogger logger;
         private int? maxLength;
         private static readonly Encoding Encoding = Encoding.UTF8;
         private static readonly ArrayPool<byte> ByteArrayPool = ArrayPool<byte>.Shared;
