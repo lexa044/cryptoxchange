@@ -16,7 +16,9 @@ Xchange.Client.prototype.request = function (options, callback) {
         method: method,
         url: uri,
         data: body,
-        qs: qs
+        qs: qs,
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
     };
 
     for (var prop in headers) {
@@ -95,13 +97,12 @@ var ExchangeService = function () {
             var options = {
                 method: 'POST',
                 endpoint: 'Exchanges',
-                headers: { 'Content-Type': 'application/json' },
-                body: { 'FromAddress': fundingAddress, 'ToAddress': receivingAddress }
+                body: JSON.stringify({ 'FromAddress': fundingAddress, 'ToAddress': receivingAddress })
             };
 
             _client.request(options, function (err, data) {
                 if (!err) {
-                    if (data.fromAddressBase64) {
+                    if (data.fromAddress) {
                         _tradeInfo = data;
                         $("#txtFundingAddress").val(data.fromAddress);
                         $("#imgFundingAddress").attr("src", "https://zxing.org/w/chart?cht=qr&chs=350x350&chld=L&choe=UTF-8&chl=" + data.fromAddress).attr("alt", data.fromAddress);
