@@ -5,8 +5,7 @@ using CryptoXchange.Services;
 
 namespace CryptoXchange.Controllers.Api
 {
-    [Produces("application/json")]
-    [Route("api/Exchanges")]
+    [Route("api/[controller]")]
     public class ExchangesController : Controller
     {
         private readonly ExchangeService _exchangeService;
@@ -16,18 +15,15 @@ namespace CryptoXchange.Controllers.Api
             _exchangeService = exchangeService;
         }
 
-        // GET: 
-        [HttpGet("{symbol}")]
-        public IActionResult Get(string symbol)
+        [HttpGet("{id}")]
+        public IActionResult Get(string id)
         {
-            return Ok(_exchangeService.GetTransferRequestForSymbol(symbol).Result);
+            return Ok(_exchangeService.GetTransferRequestForSymbol(id).Result);
         }
 
-        // GET: 
-        [HttpPost("transfer")]
-        public IActionResult Transfer(TransferModel request)
+        [HttpPost]
+        public IActionResult Transfer([FromBody]TransferModel request)
         {
-            //ExchangeModel model = GenerateExchangeModel();
             return Ok(_exchangeService.HandleTransfer(request).Result);
         }
     }

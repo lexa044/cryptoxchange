@@ -2,6 +2,7 @@
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NLog;
 
 using CryptoXchange.Configuration;
 using CryptoXchange.DaemonInterface;
@@ -27,7 +28,7 @@ namespace CryptoXchange.Payments
         private readonly NotificationService _notificationService;
         private volatile bool _updatingThroughput;
 
-        protected static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(typeof(PayoutManager));
+        private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
         public PayoutManager(IJobManager jobManager, 
             IContextHolder contextHolder, 

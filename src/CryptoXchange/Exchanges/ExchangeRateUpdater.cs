@@ -1,5 +1,7 @@
 ﻿using System;
 
+using NLog;
+
 using CryptoXchange.Infrastructure;
 using CryptoXchange.Scheduler;
 
@@ -10,7 +12,7 @@ namespace CryptoXchange.Exchanges
         private readonly IJobManager _jobManager;
         private readonly IExchangeRateProvider _exchangeRateProvider;
         private readonly IContextHolder _contextHolder;
-        protected static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(typeof(ExchangeRateUpdater));
+        private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
         public ExchangeRateUpdater(IJobManager jobManager, IExchangeRateProvider exchangeRateProvider, IContextHolder contextHolder)
         {

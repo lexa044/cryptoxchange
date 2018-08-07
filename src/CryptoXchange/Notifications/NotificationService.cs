@@ -11,6 +11,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 
 using Newtonsoft.Json;
+using NLog;
 
 using CryptoXchange.Infrastructure;
 using CryptoXchange.Configuration;
@@ -19,7 +20,7 @@ namespace CryptoXchange.Notifications
 {
     public class NotificationService
     {
-        protected static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(typeof(NotificationService));
+        private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
         private readonly Regex regexStripHtml = new Regex(@"<[^>]*>", RegexOptions.Compiled);
 
         private readonly IContextHolder _contextHolder;
@@ -96,7 +97,7 @@ namespace CryptoXchange.Notifications
 
             catch (Exception ex)
             {
-                _logger.Error("Error sending notification", ex);
+                _logger.Error(ex);
             }
         }
 

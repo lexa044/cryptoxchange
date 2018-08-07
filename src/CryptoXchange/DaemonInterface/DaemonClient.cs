@@ -17,6 +17,8 @@ using NetMQ;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
+using NLog;
+
 using CryptoXchange.Configuration;
 using CryptoXchange.JsonRpc;
 using CryptoXchange.Util;
@@ -26,7 +28,7 @@ namespace CryptoXchange.DaemonInterface
 {
     public class DaemonClient
     {
-        protected static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(typeof(DaemonClient));
+        protected static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
         public DaemonClient(JsonSerializerSettings serializerSettings, string walletPassword)
         {

@@ -1,9 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Drawing;
-
-using QRCoder;
-using static QRCoder.PayloadGenerator;
 
 using Newtonsoft.Json;
 
@@ -17,14 +12,11 @@ using CryptoXchange.Configuration;
 using CryptoXchange.Extensions;
 using CryptoXchange.Payments;
 using CryptoXchange.Scheduler;
-using System.Collections.Generic;
-using System.Reactive.Linq;
 
 namespace CryptoXchange.Services
 {
     public class ExchangeService : BaseService
     {
-        private readonly QRCodeGenerator _qrService;
         private readonly IContextHolder _contextHolder;
         private readonly IConnectionFactory _iConnectionFactory;
         private readonly ITransferRequestRepository _iTransferRequestRepository;
@@ -49,30 +41,6 @@ namespace CryptoXchange.Services
             _daemonClientFactory = daemonClientFactory;
             _payoutManager = payoutManager;
             _jobManager = jobManager;
-            _qrService = new QRCodeGenerator();
-
-            /*DaemonClient coinClient = _daemonClientFactory.GetDaemonClient(CoinType.BTC);
-            if (null != coinClient)
-            {
-                Dictionary<DaemonEndpointConfig, (string Socket, string Topic)> portMap = new Dictionary<DaemonEndpointConfig, (string Socket, string Topic)>();
-
-                DaemonEndpointConfig endpointConfig = new DaemonEndpointConfig();
-                var zmq = (Socket: "tcp://127.0.0.1:28332", Topic: "hashtx");
-                portMap[endpointConfig] = zmq;
-
-                var subject = coinClient.ZmqSubscribe(portMap, 2)
-                    .Select(frames =>
-                    {
-                        // We just take the second frame's raw data and turn it into a hex string.
-                        // If that string changes, we got an update (DistinctUntilChanged)
-                        var result = frames[1].ToHexString();
-                        frames.Dispose();
-                        return result;
-                    })
-                    .DistinctUntilChanged();
-
-                subject.Subscribe(OnHashTxReceived,OnHashTxError);
-            }*/
         }
 
         private void OnHashTxReceived(string tx)
@@ -112,27 +80,6 @@ namespace CryptoXchange.Services
 
                 TransferModel response = new TransferModel();
                 response.FromAddress = btcAddress;
-                BitcoinAddress generator = new PayloadGenerator.BitcoinAddress(response.FromAddress, null);
-                string payload = generator.ToString();
-                try
-                {
-                    QRCodeData qrCodeData = _qrService.CreateQrCode(payload, QRCodeGenerator.ECCLevel.Q);
-                    QRCode qrCode = new QRCode(qrCodeData);
-                    using (Bitmap bitmap = qrCode.GetGraphic(20))
-                    {
-                        using (var ms = new MemoryStream())
-                        {
-                            // save to stream as PNG
-                            bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                            response.FromAddressBase64 = Convert.ToBase64String(ms.ToArray());
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    response.FromAddressBase64 = string.Empty;
-                    _logger.Error("GetExchangeForSymbol", ex);
-                }
 
                 return response;
             };
@@ -180,7 +127,7 @@ namespace CryptoXchange.Services
                 catch (Exception ex)
                 {
                     response.FromAddressBase64 = string.Empty;
-                    _logger.Error("GetExchangeForSymbol", ex);
+                    _logger.Error(ex);
                 }
 
                 return response;

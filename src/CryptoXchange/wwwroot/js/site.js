@@ -16,10 +16,7 @@ Xchange.Client.prototype.request = function (options, callback) {
         method: method,
         url: uri,
         data: body,
-        qs: qs,
-        headers: {
-            'User-Agent': 'Xchange-Client 1.0.0'
-        }
+        qs: qs
     };
 
     for (var prop in headers) {
@@ -32,59 +29,9 @@ Xchange.Client.prototype.request = function (options, callback) {
     });
 
     request.fail(function (jqXHR, textStatus) {
-        //alert("Request failed: " + textStatus);
         callback(true, textStatus);
     });
 };
-
-var LocationService = function () {
-    var locationServiceFactory = {};
-    var _location_timeout;
-    var options = {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0
-    };
-    var _callback;
-    var _getLocation = function (callback) {
-        _callback = callback;
-        if (navigator.geolocation) {
-            _location_timeout = setTimeout(function () {
-                clearTimeout(_location_timeout);
-                _handleError({ code: 'TIMEOUT' });
-            }, 10000);
-            navigator.geolocation.getCurrentPosition(_handleSuccess, _handleError, options);
-        } else {
-            log('Geolocation is not supported by this browser.');
-            _handleError({ code: 'TIMEOUT' });
-        }
-    };
-    var _handleSuccess = function (position) {
-        clearTimeout(_location_timeout);
-        _callback(position.coords.latitude, position.coords.longitude);
-    };
-    var _handleError = function (error) {
-        switch (error.code) {
-            case error.PERMISSION_DENIED:
-                log('User denied the request for Geolocation.');
-                break;
-            case error.POSITION_UNAVAILABLE:
-                log('Location information is unavailable.');
-                break;
-            case error.TIMEOUT:
-                log('The request to get user location timed out.');
-                break;
-            case error.UNKNOWN_ERROR:
-                log('An unknown error occurred.');
-                break;
-        }
-        _callback(0, 0);
-    }
-
-    locationServiceFactory.getLocation = _getLocation;
-
-    return locationServiceFactory;
-}();
 
 var ExchangeService = function () {
     var serviceFactory = {};
@@ -116,9 +63,7 @@ var ExchangeService = function () {
         _fromInput.off("keyup", _inputOff);
         _fromInput.on("keyup", _inputOn);
 
-        var targetEndpoint = "/api/Exchanges?key=";
         var context = this;
-
         var options = {
             method: 'GET',
             endpoint: 'Exchanges/' + _symbol
@@ -127,7 +72,7 @@ var ExchangeService = function () {
             if (!err) {
                 _tradeInfo = data;
                 $("#txtFundingAddress").val(data.fromAddress);
-                $("#imgFundingAddress").attr("src", "data:image/png;base64," + data.fromAddressBase64).attr("alt", data.fromAddress);
+                $("#imgFundingAddress").attr("src", "https://zxing.org/w/chart?cht=qr&chs=200x200&chld=L&choe=UTF-8&chl=" + data.fromAddress).attr("alt", data.fromAddress);
             }
         });
 
@@ -149,7 +94,8 @@ var ExchangeService = function () {
 
             var options = {
                 method: 'POST',
-                endpoint: 'Exchanges/transfer',
+                endpoint: 'Exchanges',
+                headers: { 'Content-Type': 'application/json' },
                 body: { 'FromAddress': fundingAddress, 'ToAddress': receivingAddress }
             };
 
@@ -158,7 +104,7 @@ var ExchangeService = function () {
                     if (data.fromAddressBase64) {
                         _tradeInfo = data;
                         $("#txtFundingAddress").val(data.fromAddress);
-                        $("#imgFundingAddress").attr("src", "data:image/png;base64," + data.fromAddressBase64).attr("alt", data.fromAddress);
+                        $("#imgFundingAddress").attr("src", "https://zxing.org/w/chart?cht=qr&chs=350x350&chld=L&choe=UTF-8&chl=" + data.fromAddress).attr("alt", data.fromAddress);
                         $('#dlgExchangeConfirm').modal('hide');
                     }
                 }
@@ -166,7 +112,6 @@ var ExchangeService = function () {
         });
     };
     
-    //http://bootstrap-ecommerce.com/
     serviceFactory.init = _init;
 
     return serviceFactory;

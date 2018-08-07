@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+
+using NLog;
+
 using CryptoXchange.Models;
 
 namespace CryptoXchange.Services
@@ -7,7 +10,7 @@ namespace CryptoXchange.Services
     public abstract class BaseService
     {
         #region [ Private Variables ]
-        protected static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(typeof(BaseService));
+        protected static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
         #endregion
 
         #region [ Constructor ]
