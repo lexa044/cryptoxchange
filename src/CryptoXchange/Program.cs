@@ -24,6 +24,8 @@ namespace CryptoXchange
                 AppDomain.CurrentDomain.UnhandledException += OnAppDomainUnhandledException;
                 AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
 
+                ConfigureLogging();
+
                 var host = BuildWebHost(args);
                 Logo();
                 host.Run();
@@ -79,7 +81,7 @@ namespace CryptoXchange
 
         private static void Shutdown()
         {
-            _logger.Info(() => "Shutdown ...");
+            _logger?.Info(() => "Shutdown ...");
             Console.WriteLine("Shutdown...");
         }
 
