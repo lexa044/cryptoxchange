@@ -45,6 +45,14 @@ namespace CryptoXchange.Exchanges
             try
             {
                 _contextHolder.ExchangeRate = _exchangeRateProvider.GetCurrentRate();
+
+                if (null != _contextHolder.ExchangeRate)
+                {
+                    //Adjust Bid Price to BTP to USD Exchange Rate
+                    decimal btpusd = 2.5m;
+                    _contextHolder.ExchangeRate.Bid = (_contextHolder.ExchangeRate.Bid / btpusd);
+                }
+
                 LastExecuted = DateTime.Now;
                 _jobManager.Add(this);
             }

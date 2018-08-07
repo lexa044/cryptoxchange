@@ -171,8 +171,8 @@ namespace CryptoXchange.Payments
                     if(exchangeRate > 0)
                     {
                         decimal tradeAmount = (request.Amount * exchangeRate);
-                        decimal feed = (tradeAmount * 0.05m);
-                        decimal amount = (tradeAmount - feed);
+                        decimal fee = 0;// (tradeAmount * 0.05m);
+                        decimal amount = (tradeAmount - fee);
 
                         Transfer transfer = new Transfer
                         {
