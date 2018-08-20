@@ -23,6 +23,8 @@ namespace CryptoXchange.Controllers
             if (null != _contextHolder.ExchangeRate)
                 model.ExchangeRate = _contextHolder.ExchangeRate.Bid;
 
+            model.ExchangeValue = _contextHolder.Config.ExchangeValue;
+
             return View(model);
         }
 

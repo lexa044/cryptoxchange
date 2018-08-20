@@ -6,5 +6,6 @@
         public string ToAddress { get; set; }
         public string FromAddressBase64 { get; set; }
         public decimal ExchangeRate { get; set; }
+        public decimal ExchangeValue { get; set; }
     }
 }

@@ -158,6 +158,7 @@ namespace CryptoXchange.Configuration
     public class CXConfig
     {
         public string ExchangeName { get; set; }
+        public decimal ExchangeValue { get; set; }
         public ClusterLoggingConfig Logging { get; set; }
         public NotificationsConfig Notifications { get; set; }
         public PersistenceConfig Persistence { get; set; }

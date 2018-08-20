@@ -49,7 +49,7 @@ namespace CryptoXchange.Exchanges
                 if (null != _contextHolder.ExchangeRate)
                 {
                     //Adjust Bid Price to BTP to USD Exchange Rate
-                    decimal btpusd = 2.5m;
+                    decimal btpusd = _contextHolder.Config.ExchangeValue;
                     _contextHolder.ExchangeRate.Bid = (_contextHolder.ExchangeRate.Bid / btpusd);
                 }
 
