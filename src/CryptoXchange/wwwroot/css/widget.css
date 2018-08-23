@@ -1,0 +1,77 @@
+﻿._bcFixedButton {
+    background-color: #DDDDDD;
+    border: 1px solid #999999;
+    bottom: 0;
+    cursor: pointer;
+    height: 55px;
+    left: 0;
+    min-width: 300px;
+    position: fixed;
+    right: 0;
+    z-index: 1000;
+}
+
+._bcFixedButton._bcCollapsed {
+    opacity: 0.6;
+    min-width: 0;
+    border-right: none;
+}
+
+._bcFixedButton._bcCollapsed._bcTable > ._bcTableCell:not(:first-child) {
+    display: none;
+}
+
+._bcFixedButton._bcTable {
+    display: table;
+}
+
+._bcFixedButton._bcTable > ._bcTableCell {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+._bcFixedButton._bcTable > ._bcTableCell:last-child {
+    width: 100%;
+}
+
+._bcFixedButton ._bcSwB {
+    /*background: url("{{APPLICATION_PATH}}widgetImages/arrow-right.png") no-repeat scroll center center transparent;*/
+    border-right: solid 1px #999999;
+    display: inline-block;
+    height: 100%;
+    width: 55px;
+}
+
+._bcFixedButton._bcCollapsed ._bcSwB {
+    /*background: url("{{APPLICATION_PATH}}widgetImages/arrow-left.png") no-repeat scroll center center transparent;*/
+}
+
+._bcFixedButton ._bcShB {
+    /*background: url("{{APPLICATION_PATH}}widgetImages/BtsSprite.png") repeat scroll -60px -148px transparent;*/
+    display: inline-block;
+    height: 30px;
+    margin: 0 3px;
+    width: 40px;
+}
+
+._bcFixedButton ._bcShB:active {
+    /*background: url("{{APPLICATION_PATH}}widgetImages/BtsSprite.png") repeat scroll -60px -148px transparent;*/
+}
+
+._bcFixedButton ._bcSDI {
+    /*background: url("{{APPLICATION_PATH}}widgetImages/deals-icon.png") no-repeat scroll center center transparent;*/
+    background-size: 30px 40px;
+    border-left: solid 1px #999999;
+    display: inline-block;
+    height: 100%;
+    width: 55px;
+    float: right;
+}
+
+._bcFixedButton ._bcShD {
+    color: #333333;
+    font-weight: bold;
+    font-size: 18px;
+    display: inline-block;
+    min-width: 120px;
+}

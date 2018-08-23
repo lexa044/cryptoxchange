@@ -28,5 +28,13 @@ namespace CryptoXchange.Extensions
             value = BitConverter.ToUInt32(bytes, 0);
             return value;
         }
+
+        public static decimal TruncateDecimalPlaces(this decimal val, int places)
+        {
+            if (places <= 0)
+                return Math.Truncate(val);
+
+            return Math.Round(val - Convert.ToDecimal((0.5 / Math.Pow(10, places))), places);
+        }
     }
 }

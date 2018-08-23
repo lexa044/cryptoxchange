@@ -4,6 +4,7 @@ using NLog;
 
 using CryptoXchange.Infrastructure;
 using CryptoXchange.Scheduler;
+using CryptoXchange.Extensions;
 
 namespace CryptoXchange.Exchanges
 {
@@ -50,7 +51,7 @@ namespace CryptoXchange.Exchanges
                 {
                     //Adjust Bid Price to BTP to USD Exchange Rate
                     decimal btpusd = _contextHolder.Config.ExchangeValue;
-                    _contextHolder.ExchangeRate.Bid = (_contextHolder.ExchangeRate.Bid / btpusd);
+                    _contextHolder.ExchangeRate.Bid = (_contextHolder.ExchangeRate.Bid / btpusd);//.TruncateDecimalPlaces(8);
                 }
 
                 LastExecuted = DateTime.Now;
