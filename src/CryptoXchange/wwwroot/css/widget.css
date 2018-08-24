@@ -1,5 +1,105 @@
-﻿._bcFixedButton {
-    background-color: #DDDDDD;
+﻿#_bcOverlay *, #_bcOverlay *:before, #_bcOverlay *:after {-moz-box-sizing: content-box;-webkit-box-sizing: content-box;box-sizing: content-box;}
+
+@font-face {
+    font-family: 'Glyphicons Halflings';
+    src: url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/fonts/glyphicons-halflings-regular.eot');
+    src: url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/fonts/glyphicons-halflings-regular.woff') format('woff'), url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
+
+  .bcglyphicon {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .bcglyphicon-asterisk:before {
+    content: "\002a";
+  }
+  .bcglyphicon-plus:before {
+    content: "\002b";
+  }
+
+._bcmodal {
+    padding-top: 100px; /* Location of the box */
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    display: none;
+    outline: 0;    
+    overflow-x: hidden;
+    overflow-y: auto;    
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+
+}
+
+/* Modal Content */
+._bcmodal-content {
+    max-width: 500px;
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 80%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0} 
+    to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+/* The Close Button */
+._bcclose {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+._bcclose:hover,
+._bcclose:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+._bcmodal-header {
+    /* padding: 2px 16px; */
+    /* background-color: #5cb85c;
+    color: white; */
+    padding: 15px;
+border-bottom: 1px solid #e5e5e5;
+}
+._bcmodal-body {padding: 2px 16px;}
+._bcmodal-footer {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+._bcFixedButton {
+    background-color: #222;
     border: 1px solid #999999;
     bottom: 0;
     cursor: pointer;
@@ -69,7 +169,7 @@
 }
 
 ._bcFixedButton ._bcShD {
-    color: #333333;
+    color: #dda600;
     font-weight: bold;
     font-size: 18px;
     display: inline-block;

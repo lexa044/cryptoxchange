@@ -79,7 +79,6 @@
 
                 loadWidgetCss();
                 initializeWidgetContainers();
-
             }
         });
     }
@@ -159,18 +158,20 @@
     function loadWidgetCss() {
         if (options.use_uicss)
             //jQuery('head').append('<link href="' + getProtocol() + 'btc.betchip.io/css/widget.css?v=' + encodeURIComponent(options.token) + '" rel="stylesheet" type="text/css">');
-            jQuery('head').append('<link href="http://localhost:50120/css/widget.css?v=' + encodeURIComponent(options.token) + '" rel="stylesheet" type="text/css">');
+            //http://localhost:5000/loader.html
+            jQuery('head').append('<link href="http://localhost:5000/css/widget.css?v=' + encodeURIComponent(options.token) + '" rel="stylesheet" type="text/css">');
     }
 
     function initializeWidgetContainers() {
-        if (jQuery(container_selector).size() === 0) {
-            jQuery('body').prepend('<div id="' + container + '"></div>');
-        }
-        if (jQuery(alert_selector).size() === 0) {
-            jQuery('body').prepend('<div id="' + alert_container + '"></div>');
-        }
-        //if (jQuery(overlay_selector).size() === 0) {
-        //    jQuery('body').append('<div id="' + overlay + '"></div>');
+        // if (jQuery(container_selector).size() === 0) {
+        //     jQuery('body').prepend('<div id="' + container + '"></div>');
+        // }
+        // if (jQuery(alert_selector).size() === 0) {
+        //     jQuery('body').prepend('<div id="' + alert_container + '"></div>');
+        // }
+        if (jQuery(overlay_selector).size() === 0) {
+           jQuery('body').append('<div id="' + overlay + '" class="_bcmodal"></div>');
+           jQuery(overlay_selector).append(getSettingDialogLayout());
         //    jQuery(overlay_selector).css({
         //        'display': 'none',
         //        'position': 'fixed',
@@ -181,7 +182,26 @@
         //        'width': '100%',
         //        'top': '0px'
         //    }).click(close_modal);
-        //}
+
+// // Get the modal
+// var modal = document.getElementById('myModal');
+
+// // Get the button that opens the modal
+// var btn = document.getElementById("myBtn");
+
+// // Get the <span> element that closes the modal
+// var span = document.getElementsByClassName("close")[0];
+
+// // When the user clicks the button, open the modal 
+// btn.onclick = function() {
+//     modal.style.display = "block";
+// }
+
+// // When the user clicks on <span> (x), close the modal
+// span.onclick = function() {
+//     modal.style.display = "none";
+// }        
+        }
 
         if (jQuery('._bcFixedButton').size() === 0) {
             var html = getMobileFixedShareButtonLayout();
@@ -197,7 +217,8 @@
             $shareButton.toggleClass('_bcCollapsed');
         });
         $shareButton.find('._bcShB,._bcShD').click(function () {
-            e.click();
+            // e.click();
+            jQuery(overlay_selector).show();
         });
     }
 
@@ -206,6 +227,22 @@
             '<div class="_bcTableCell"><span class="_bcSwB">&nbsp;</span></div>',
             '<div class="_bcTableCell"><span class="_bcShB">&nbsp;</span></div>',
             '<div class="_bcTableCell"><span class="_bcShD">Share Today!</span></div>',
+            '</div>'].join("");
+    }
+
+    function getSettingDialogLayout() {
+        return ['<div class="_bcmodal-content">',
+            '<div class="_bcmodal-header"><span class="_bcclose">&times;</span>',
+            '<h4>Transfer Confirmation</h4>',
+            '</div>',
+            '<div class="_bcmodal-body">',
+            '<p>Some text in the Modal Body</p>',
+            '<p>Some other text...<span class="bcglyphicon bcglyphicon-plus" aria-hidden="true"></span></p>',
+            '</div>',
+            '<div class="_bcmodal-footer">',
+            '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>',
+            '<button type="button" class="btn btn-primary" id="btnConfirmTransfer"><i class="fas fa-exchange-alt"></i>Submit</button>',
+            '</div>',
             '</div>'].join("");
     }
 
