@@ -158,8 +158,7 @@
     function loadWidgetCss() {
         if (options.use_uicss)
             //jQuery('head').append('<link href="' + getProtocol() + 'btc.betchip.io/css/widget.css?v=' + encodeURIComponent(options.token) + '" rel="stylesheet" type="text/css">');
-            //http://localhost:5000/loader.html
-            jQuery('head').append('<link href="http://localhost:5000/css/widget.css?v=' + encodeURIComponent(options.token) + '" rel="stylesheet" type="text/css">');
+            jQuery('head').append('<link href="http://localhost:50120/css/widget.css?v=' + encodeURIComponent(options.token) + '" rel="stylesheet" type="text/css">');
     }
 
     function initializeWidgetContainers() {
@@ -172,62 +171,18 @@
         if (jQuery(overlay_selector).size() === 0) {
            jQuery('body').append('<div id="' + overlay + '" class="_bcmodal"></div>');
            jQuery(overlay_selector).append(getSettingDialogLayout());
-        //    jQuery(overlay_selector).css({
-        //        'display': 'none',
-        //        'position': 'fixed',
-        //        'background': '#000',
-        //        'z-index': 10999,
-        //        'left': '0px',
-        //        'height': '100%',
-        //        'width': '100%',
-        //        'top': '0px'
-        //    }).click(close_modal);
-
-// // Get the modal
-// var modal = document.getElementById('myModal');
-
-// // Get the button that opens the modal
-// var btn = document.getElementById("myBtn");
-
-// // Get the <span> element that closes the modal
-// var span = document.getElementsByClassName("close")[0];
-
-// // When the user clicks the button, open the modal 
-// btn.onclick = function() {
-//     modal.style.display = "block";
-// }
-
-// // When the user clicks on <span> (x), close the modal
-// span.onclick = function() {
-//     modal.style.display = "none";
-// }        
         }
 
         if (jQuery('._bcFixedButton').size() === 0) {
-            var html = getMobileFixedShareButtonLayout();
+            var html = getLinkerFixedButtonLayout();
             jQuery('body').append(html);
-            jQuery('body').css("padding-bottom", jQuery('div._bcFixedButton').css('height'));
         }
-
-        var theMobileShareBarLabel = 'Betchip';
-
-        $shareButton = jQuery('._bcFixedButton');
-        $shareButton.find('._bcShD').html(theMobileShareBarLabel);
-        $shareButton.find('._bcSwB').click(function () {
-            $shareButton.toggleClass('_bcCollapsed');
-        });
-        $shareButton.find('._bcShB,._bcShD').click(function () {
-            // e.click();
-            jQuery(overlay_selector).show();
-        });
     }
 
-    function getMobileFixedShareButtonLayout() {
-        return ['<div class="_bcFixedButton _bcTable">',
-            '<div class="_bcTableCell"><span class="_bcSwB">&nbsp;</span></div>',
-            '<div class="_bcTableCell"><span class="_bcShB">&nbsp;</span></div>',
-            '<div class="_bcTableCell"><span class="_bcShD">Share Today!</span></div>',
-            '</div>'].join("");
+    function getLinkerFixedButtonLayout() {
+        return ['<a href="javascript:void(0);" class="_bcFixedButton">',
+            '<span class="bcglyphicon bcglyphicon-btc" aria-hidden="true"></span>',
+            '</a>'].join("");
     }
 
     function getSettingDialogLayout() {

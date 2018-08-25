@@ -24,9 +24,45 @@
   .bcglyphicon-plus:before {
     content: "\002b";
   }
+.bcglyphicon-qrcode:before {
+    content: "\e039";
+}
+.bcglyphicon-btc:before {
+    content: "\e227";
+}
+.close {
+    float: right;
+    font-size: 21px;
+    font-weight: bold;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    filter: alpha(opacity=20);
+    opacity: .2;
+}
 
-._bcmodal {
-    padding-top: 100px; /* Location of the box */
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+        filter: alpha(opacity=50);
+        opacity: .5;
+    }
+
+button.close {
+    -webkit-appearance: none;
+    padding: 0;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+}
+
+.modal-open {
+    overflow: hidden;
+}
+
+.modal {
     position: fixed;
     top: 0;
     right: 0;
@@ -34,144 +70,167 @@
     left: 0;
     z-index: 1050;
     display: none;
-    outline: 0;    
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+    outline: 0;
+}
+
+    .modal.fade .modal-dialog {
+        -webkit-transition: -webkit-transform .3s ease-out;
+        -o-transition: -o-transform .3s ease-out;
+        transition: transform .3s ease-out;
+        -webkit-transform: translate(0, -25%);
+        -ms-transform: translate(0, -25%);
+        -o-transform: translate(0, -25%);
+        transform: translate(0, -25%);
+    }
+
+    .modal.in .modal-dialog {
+        -webkit-transform: translate(0, 0);
+        -ms-transform: translate(0, 0);
+        -o-transform: translate(0, 0);
+        transform: translate(0, 0);
+    }
+
+.modal-open .modal {
     overflow-x: hidden;
-    overflow-y: auto;    
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-
+    overflow-y: auto;
 }
 
-/* Modal Content */
-._bcmodal-content {
-    max-width: 500px;
+.modal-dialog {
     position: relative;
-    background-color: #fefefe;
-    margin: auto;
-    padding: 0;
-    border: 1px solid #888;
-    width: 80%;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
-    -webkit-animation-name: animatetop;
-    -webkit-animation-duration: 0.4s;
-    animation-name: animatetop;
-    animation-duration: 0.4s
+    width: auto;
+    margin: 10px;
 }
 
-/* Add Animation */
-@-webkit-keyframes animatetop {
-    from {top:-300px; opacity:0} 
-    to {top:0; opacity:1}
+.modal-content {
+    position: relative;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #999;
+    border: 1px solid rgba(0, 0, 0, .2);
+    border-radius: 6px;
+    outline: 0;
+    -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
 }
 
-@keyframes animatetop {
-    from {top:-300px; opacity:0}
-    to {top:0; opacity:1}
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
+    background-color: #000;
 }
 
-/* The Close Button */
-._bcclose {
-    color: white;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+    .modal-backdrop.fade {
+        filter: alpha(opacity=0);
+        opacity: 0;
+    }
+
+    .modal-backdrop.in {
+        filter: alpha(opacity=50);
+        opacity: .5;
+    }
+
+.modal-header {
+    padding: 15px;
+    border-bottom: 1px solid #e5e5e5;
 }
-._bcclose:hover,
-._bcclose:focus {
-    color: #000;
+
+    .modal-header .close {
+        margin-top: -2px;
+    }
+
+.modal-title {
+    margin: 0;
+    line-height: 1.42857143;
+}
+
+.modal-body {
+    position: relative;
+    padding: 15px;
+}
+
+.modal-footer {
+    padding: 15px;
+    text-align: right;
+    border-top: 1px solid #e5e5e5;
+}
+
+    .modal-footer .btn + .btn {
+        margin-bottom: 0;
+        margin-left: 5px;
+    }
+
+    .modal-footer .btn-group .btn + .btn {
+        margin-left: -1px;
+    }
+
+    .modal-footer .btn-block + .btn-block {
+        margin-left: 0;
+    }
+
+.modal-scrollbar-measure {
+    position: absolute;
+    top: -9999px;
+    width: 50px;
+    height: 50px;
+    overflow: scroll;
+}
+
+@media (min-width: 768px) {
+    .modal-dialog {
+        width: 600px;
+        margin: 30px auto;
+    }
+
+    .modal-content {
+        -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+    }
+
+    .modal-sm {
+        width: 300px;
+    }
+}
+
+@media (min-width: 992px) {
+    .modal-lg {
+        width: 900px;
+    }
+}
+
+.modal-header:before,
+.modal-header:after,
+.modal-footer:before,
+.modal-footer:after {
+    display: table;
+    content: " ";
+}
+
+.modal-header:after,
+.modal-footer:after {
+    clear: both;
+}
+
+
+a._bcFixedButton {
+    padding: 10px 12px;
+    position: fixed;
+    bottom: 8px;
+    right: 8px;
+    background: #0086dc;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+    z-index: 1000;
+    color: #fff;
     text-decoration: none;
     cursor: pointer;
 }
-._bcmodal-header {
-    /* padding: 2px 16px; */
-    /* background-color: #5cb85c;
-    color: white; */
-    padding: 15px;
-border-bottom: 1px solid #e5e5e5;
-}
-._bcmodal-body {padding: 2px 16px;}
-._bcmodal-footer {
-    padding: 2px 16px;
-    background-color: #5cb85c;
-    color: white;
-}
 
-._bcFixedButton {
-    background-color: #222;
-    border: 1px solid #999999;
-    bottom: 0;
-    cursor: pointer;
-    height: 55px;
-    left: 0;
-    min-width: 300px;
-    position: fixed;
-    right: 0;
-    z-index: 1000;
-}
-
-._bcFixedButton._bcCollapsed {
-    opacity: 0.6;
-    min-width: 0;
-    border-right: none;
-}
-
-._bcFixedButton._bcCollapsed._bcTable > ._bcTableCell:not(:first-child) {
-    display: none;
-}
-
-._bcFixedButton._bcTable {
-    display: table;
-}
-
-._bcFixedButton._bcTable > ._bcTableCell {
-    display: table-cell;
-    vertical-align: middle;
-}
-
-._bcFixedButton._bcTable > ._bcTableCell:last-child {
-    width: 100%;
-}
-
-._bcFixedButton ._bcSwB {
-    /*background: url("{{APPLICATION_PATH}}widgetImages/arrow-right.png") no-repeat scroll center center transparent;*/
-    border-right: solid 1px #999999;
-    display: inline-block;
-    height: 100%;
-    width: 55px;
-}
-
-._bcFixedButton._bcCollapsed ._bcSwB {
-    /*background: url("{{APPLICATION_PATH}}widgetImages/arrow-left.png") no-repeat scroll center center transparent;*/
-}
-
-._bcFixedButton ._bcShB {
-    /*background: url("{{APPLICATION_PATH}}widgetImages/BtsSprite.png") repeat scroll -60px -148px transparent;*/
-    display: inline-block;
-    height: 30px;
-    margin: 0 3px;
-    width: 40px;
-}
-
-._bcFixedButton ._bcShB:active {
-    /*background: url("{{APPLICATION_PATH}}widgetImages/BtsSprite.png") repeat scroll -60px -148px transparent;*/
-}
-
-._bcFixedButton ._bcSDI {
-    /*background: url("{{APPLICATION_PATH}}widgetImages/deals-icon.png") no-repeat scroll center center transparent;*/
-    background-size: 30px 40px;
-    border-left: solid 1px #999999;
-    display: inline-block;
-    height: 100%;
-    width: 55px;
-    float: right;
-}
-
-._bcFixedButton ._bcShD {
-    color: #dda600;
-    font-weight: bold;
-    font-size: 18px;
-    display: inline-block;
-    min-width: 120px;
-}
