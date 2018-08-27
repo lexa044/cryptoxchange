@@ -71,7 +71,15 @@ namespace CryptoXchange
             services.RegisterServices();
 
             // Add cors
-            services.AddCors();
+            //services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
 
             // Add framework services.
             services.AddMvc();
@@ -108,6 +116,8 @@ namespace CryptoXchange
             });
 
             app.UseStaticFiles();
+
+            app.UseCors("CorsPolicy");
 
             app.UseMvc(routes =>
             {

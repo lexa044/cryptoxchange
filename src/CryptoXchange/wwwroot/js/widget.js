@@ -4,15 +4,17 @@
     var overlay, overlay_selector, container_selector, alert_selector, container, alert_container;
     var browser = {};
     var browserGEO = { latitude: 0, longitude: 0 };
+    var _client, _tradeInfo;
+    var _symbol = 'btcusd';
 
     MYNAMESPACE.Widget = function (opts) {
         options = opts;
-        overlay_selector = '#_bcWOverlay';
+        overlay_selector = '#dlgExchangeConfirm';
         container_selector = '#_bcWc';
         alert_selector = '#_bcMSGBox';
         container = '_bcWc';
         alert_container = '_bcMSGBox';
-        overlay = '_bcWOverlay';
+        overlay = 'dlgExchangeConfirm';
     };
 
     MYNAMESPACE.initialize = function () {
@@ -69,6 +71,7 @@
     }
 
     function main() {
+        _client = new Client({ URI: getProtocol() + 'btc.betchip.io/api/'});
         jQuery(document).ready(function () {
             if (options && options.token) {
 
@@ -79,7 +82,376 @@
 
                 loadWidgetCss();
                 initializeWidgetContainers();
+                initializeJQueryPlugins();
             }
+        });
+    }
+
+    Client = function (options) {
+        this.URI = options.URI || '/api/';
+    };
+
+    Client.prototype.request = function (options, callback) {
+        var method = options.method || 'GET';
+        var endpoint = options.endpoint;
+        var body = options.body || {};
+        var qs = options.qs || {};
+        var headers = options.headers || {};
+
+        var uri = this.URI + endpoint;
+        var callOptions = {
+            method: method,
+            url: uri,
+            data: body,
+            qs: qs,
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+        };
+
+        for (var prop in headers) {
+            callOptions.headers[prop] = headers[prop];
+        }
+
+        var request = jQuery.ajax(callOptions);
+        request.done(function (data) {
+            callback(false, data);
+        });
+
+        request.fail(function (jqXHR, textStatus) {
+            callback(true, textStatus);
+        });
+    };
+
+    function Modal(element, options) {
+        this.options = options
+        this.$body = jQuery(document.body)
+        this.$element = jQuery(element)
+        this.$dialog = this.$element.find('.modal-dialog')
+        this.$backdrop = null
+        this.isShown = null
+        this.originalBodyPad = null
+        this.scrollbarWidth = 0
+        this.ignoreBackdropClick = false
+
+        if (this.options.remote) {
+            this.$element
+                .find('.modal-content')
+                .load(this.options.remote, jQuery.proxy(function () {
+                    this.$element.trigger('loaded.bs.modal')
+                }, this))
+        }
+    }
+
+    Modal.VERSION = '3.3.7'
+    Modal.TRANSITION_DURATION = 300
+    Modal.BACKDROP_TRANSITION_DURATION = 150
+    Modal.DEFAULTS = {
+        backdrop: true,
+        keyboard: true,
+        show: true
+    }
+
+    Modal.prototype = {
+        toggle: function (_relatedTarget) {
+            return this.isShown ? this.hide() : this.show(_relatedTarget)
+        },
+        show: function (_relatedTarget) {
+            var that = this
+            var e = jQuery.Event('show.bs.modal', { relatedTarget: _relatedTarget })
+
+            this.$element.trigger(e)
+
+            if (this.isShown || e.isDefaultPrevented()) return
+
+            this.isShown = true
+
+            this.checkScrollbar()
+            this.setScrollbar()
+            this.$body.addClass('modal-open')
+            this.escape()
+            this.resize()
+
+            this.$element.on('click.dismiss.bs.modal', '[data-dismiss="modal"]', jQuery.proxy(this.hide, this))
+            this.$dialog.on('mousedown.dismiss.bs.modal', function () {
+                that.$element.one('mouseup.dismiss.bs.modal', function (e) {
+                    if (jQuery(e.target).is(that.$element)) that.ignoreBackdropClick = true
+                })
+            })
+
+            this.backdrop(function () {
+                var transition = jQuery.support.transition && that.$element.hasClass('fade')
+
+                if (!that.$element.parent().length) {
+                    that.$element.appendTo(that.$body) // don't move modals dom position
+                }
+
+                that.$element
+                    .show()
+                    .scrollTop(0)
+
+                that.adjustDialog()
+
+                if (transition) {
+                    that.$element[0].offsetWidth // force reflow
+                }
+
+                that.$element.addClass('in')
+
+                that.enforceFocus()
+
+                var e = jQuery.Event('shown.bs.modal', { relatedTarget: _relatedTarget })
+
+                transition ?
+                    that.$dialog // wait for modal to slide in
+                        .one('bsTransitionEnd', function () {
+                            that.$element.trigger('focus').trigger(e)
+                        })
+                        .emulateTransitionEnd(Modal.TRANSITION_DURATION) :
+                    that.$element.trigger('focus').trigger(e)
+            })
+        },
+        hide: function (e) {
+            if (e) e.preventDefault()
+
+            e = jQuery.Event('hide.bs.modal')
+
+            this.$element.trigger(e)
+
+            if (!this.isShown || e.isDefaultPrevented()) return
+
+            this.isShown = false
+
+            this.escape()
+            this.resize()
+
+            jQuery(document).off('focusin.bs.modal')
+
+            this.$element
+                .removeClass('in')
+                .off('click.dismiss.bs.modal')
+                .off('mouseup.dismiss.bs.modal')
+
+            this.$dialog.off('mousedown.dismiss.bs.modal')
+
+            jQuery.support.transition && this.$element.hasClass('fade') ?
+                this.$element
+                    .one('bsTransitionEnd', jQuery.proxy(this.hideModal, this))
+                    .emulateTransitionEnd(Modal.TRANSITION_DURATION) :
+                this.hideModal()
+        },
+        enforceFocus: function () {
+            jQuery(document)
+                .off('focusin.bs.modal') // guard against infinite focus loop
+                .on('focusin.bs.modal', jQuery.proxy(function (e) {
+                    if (document !== e.target &&
+                        this.$element[0] !== e.target &&
+                        !this.$element.has(e.target).length) {
+                        this.$element.trigger('focus')
+                    }
+                }, this))
+        },
+        escape: function () {
+            if (this.isShown && this.options.keyboard) {
+                this.$element.on('keydown.dismiss.bs.modal', jQuery.proxy(function (e) {
+                    e.which == 27 && this.hide()
+                }, this))
+            } else if (!this.isShown) {
+                this.$element.off('keydown.dismiss.bs.modal')
+            }
+        },
+        resize: function () {
+            if (this.isShown) {
+                jQuery(window).on('resize.bs.modal', jQuery.proxy(this.handleUpdate, this))
+            } else {
+                jQuery(window).off('resize.bs.modal')
+            }
+        },
+        hideModal: function () {
+            var that = this
+            this.$element.hide()
+            this.backdrop(function () {
+                that.$body.removeClass('modal-open')
+                that.resetAdjustments()
+                that.resetScrollbar()
+                that.$element.trigger('hidden.bs.modal')
+            })
+        },
+        removeBackdrop: function () {
+            this.$backdrop && this.$backdrop.remove()
+            this.$backdrop = null
+        },
+        backdrop: function (callback) {
+            var that = this
+            var animate = this.$element.hasClass('fade') ? 'fade' : ''
+
+            if (this.isShown && this.options.backdrop) {
+                var doAnimate = jQuery.support.transition && animate
+
+                this.$backdrop = jQuery(document.createElement('div'))
+                    .addClass('modal-backdrop ' + animate)
+                    .appendTo(this.$body)
+
+                this.$element.on('click.dismiss.bs.modal', jQuery.proxy(function (e) {
+                    if (this.ignoreBackdropClick) {
+                        this.ignoreBackdropClick = false
+                        return
+                    }
+                    if (e.target !== e.currentTarget) return
+                    this.options.backdrop == 'static'
+                        ? this.$element[0].focus()
+                        : this.hide()
+                }, this))
+
+                if (doAnimate) this.$backdrop[0].offsetWidth // force reflow
+
+                this.$backdrop.addClass('in')
+
+                if (!callback) return
+
+                doAnimate ?
+                    this.$backdrop
+                        .one('bsTransitionEnd', callback)
+                        .emulateTransitionEnd(Modal.BACKDROP_TRANSITION_DURATION) :
+                    callback()
+
+            } else if (!this.isShown && this.$backdrop) {
+                this.$backdrop.removeClass('in')
+
+                var callbackRemove = function () {
+                    that.removeBackdrop()
+                    callback && callback()
+                }
+                jQuery.support.transition && this.$element.hasClass('fade') ?
+                    this.$backdrop
+                        .one('bsTransitionEnd', callbackRemove)
+                        .emulateTransitionEnd(Modal.BACKDROP_TRANSITION_DURATION) :
+                    callbackRemove()
+
+            } else if (callback) {
+                callback()
+            }
+        },
+        handleUpdate: function () {
+            this.adjustDialog()
+        },
+        adjustDialog: function () {
+            var modalIsOverflowing = this.$element[0].scrollHeight > document.documentElement.clientHeight
+
+            this.$element.css({
+                paddingLeft: !this.bodyIsOverflowing && modalIsOverflowing ? this.scrollbarWidth : '',
+                paddingRight: this.bodyIsOverflowing && !modalIsOverflowing ? this.scrollbarWidth : ''
+            })
+        },
+        resetAdjustments: function () {
+            this.$element.css({
+                paddingLeft: '',
+                paddingRight: ''
+            })
+        },
+        checkScrollbar: function () {
+            var fullWindowWidth = window.innerWidth
+            if (!fullWindowWidth) { // workaround for missing window.innerWidth in IE8
+                var documentElementRect = document.documentElement.getBoundingClientRect()
+                fullWindowWidth = documentElementRect.right - Math.abs(documentElementRect.left)
+            }
+            this.bodyIsOverflowing = document.body.clientWidth < fullWindowWidth
+            this.scrollbarWidth = this.measureScrollbar()
+        },
+        setScrollbar: function () {
+            var bodyPad = parseInt((this.$body.css('padding-right') || 0), 10)
+            this.originalBodyPad = document.body.style.paddingRight || ''
+            if (this.bodyIsOverflowing) this.$body.css('padding-right', bodyPad + this.scrollbarWidth)
+        },
+        resetScrollbar: function () {
+            this.$body.css('padding-right', this.originalBodyPad)
+        },
+        measureScrollbar: function () { // thx walsh
+            var scrollDiv = document.createElement('div')
+            scrollDiv.className = 'modal-scrollbar-measure'
+            this.$body.append(scrollDiv)
+            var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth
+            this.$body[0].removeChild(scrollDiv)
+            return scrollbarWidth
+        }
+    }
+
+    function ModalPlugin(option, _relatedTarget) {
+        return this.each(function () {
+            var $this = jQuery(this)
+            var data = $this.data('bs.modal')
+            var options = jQuery.extend({}, Modal.DEFAULTS, $this.data(), typeof option == 'object' && option)
+
+            if (!data) $this.data('bs.modal', (data = new Modal(this, options)))
+            if (typeof option == 'string') data[option](_relatedTarget)
+            else if (options.show) data.show(_relatedTarget)
+        })
+    }
+
+    function transitionEnd() {
+        var el = document.createElement('bootstrap')
+
+        var transEndEventNames = {
+            WebkitTransition: 'webkitTransitionEnd',
+            MozTransition: 'transitionend',
+            OTransition: 'oTransitionEnd otransitionend',
+            transition: 'transitionend'
+        }
+
+        for (var name in transEndEventNames) {
+            if (el.style[name] !== undefined) {
+                return { end: transEndEventNames[name] }
+            }
+        }
+
+        return false // explicit for ie8 (  ._.)
+    }
+
+    function initializeJQueryPlugins() {
+
+        var old = jQuery.fn.modal
+        jQuery.fn.modal = ModalPlugin
+        jQuery.fn.modal.Constructor = Modal
+
+        // http://blog.alexmaccaw.com/css-transitions
+        jQuery.fn.emulateTransitionEnd = function (duration) {
+            var called = false
+            var $el = this
+            jQuery(this).one('bsTransitionEnd', function () { called = true })
+            var callback = function () { if (!called) jQuery($el).trigger(jQuery.support.transition.end) }
+            setTimeout(callback, duration)
+            return this
+        }
+
+        jQuery.support.transition = transitionEnd()
+
+        jQuery.event.special.bsTransitionEnd = {
+            bindType: jQuery.support.transition.end,
+            delegateType: jQuery.support.transition.end,
+            handle: function (e) {
+                if (jQuery(e.target).is(this)) return e.handleObj.handler.apply(this, arguments)
+            }
+        }
+
+        jQuery.fn.modal.noConflict = function () {
+            jQuery.fn.modal = old
+            return this
+        }
+
+        jQuery(document).on('click.bs.modal.data-api', '[data-toggle="modal"]', function (e) {
+            var $this = jQuery(this)
+            var href = $this.attr('href')
+            var $target = jQuery($this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, ''))) // strip for ie7
+            var option = $target.data('bs.modal') ? 'toggle' : jQuery.extend({ remote: !/#/.test(href) && href }, $target.data(), $this.data())
+
+            if ($this.is('a')) e.preventDefault()
+
+            $target.one('show.bs.modal', function (showEvent) {
+                if (showEvent.isDefaultPrevented()) return // only register focus restorer if modal will actually get shown
+                $target.one('hidden.bs.modal', function () {
+                    $this.is(':visible') && $this.trigger('focus')
+                })
+            })
+            ModalPlugin.call($target, option, this)
         });
     }
 
@@ -157,46 +529,107 @@
 
     function loadWidgetCss() {
         if (options.use_uicss)
-            //jQuery('head').append('<link href="' + getProtocol() + 'btc.betchip.io/css/widget.css?v=' + encodeURIComponent(options.token) + '" rel="stylesheet" type="text/css">');
-            jQuery('head').append('<link href="http://localhost:50120/css/widget.css?v=' + encodeURIComponent(options.token) + '" rel="stylesheet" type="text/css">');
+            jQuery('head').append('<link href="' + getProtocol() + 'btc.betchip.io/css/widget.css?v=' + encodeURIComponent(options.token) + '" rel="stylesheet" type="text/css">');
+            //jQuery('head').append('<link href="http://localhost:50120/css/widget.css?v=' + encodeURIComponent(options.token) + '" rel="stylesheet" type="text/css">');
     }
 
     function initializeWidgetContainers() {
-        // if (jQuery(container_selector).size() === 0) {
-        //     jQuery('body').prepend('<div id="' + container + '"></div>');
-        // }
-        // if (jQuery(alert_selector).size() === 0) {
-        //     jQuery('body').prepend('<div id="' + alert_container + '"></div>');
-        // }
-        if (jQuery(overlay_selector).size() === 0) {
-           jQuery('body').append('<div id="' + overlay + '" class="_bcmodal"></div>');
-           jQuery(overlay_selector).append(getSettingDialogLayout());
+        if (options && options.shareSelector) {
+            jQuery(options.shareSelector).attr("data-toggle", "modal").attr("data-target", "#dlgExchangeConfirm");
         }
-
-        if (jQuery('._bcFixedButton').size() === 0) {
+        else if (jQuery('._bcFixedButton').size() === 0) {
             var html = getLinkerFixedButtonLayout();
             jQuery('body').append(html);
+        }
+
+        if (jQuery(overlay_selector).size() === 0) {
+            var html = getSettingDialogLayout();
+            jQuery('body').append(html);
+
+            var options = {
+                method: 'GET',
+                endpoint: 'Exchanges/' + _symbol
+            };
+            _client.request(options, function (err, data) {
+                if (!err) {
+                    _tradeInfo = data;
+                    jQuery("#txtFundingAddress").val(data.fromAddress);
+                    jQuery("#imgFundingAddress").attr("src", "https://zxing.org/w/chart?cht=qr&chs=200x200&chld=L&choe=UTF-8&chl=" + data.fromAddress).attr("alt", data.fromAddress);
+                }
+            });
+
+            jQuery("#btnConfirmTransfer").on("click", function (e) {
+                e.preventDefault();
+
+                var receivingAddress = jQuery("#txtReceivingAddress").val();
+                var fundingAddress = _tradeInfo.fromAddress;
+                if (receivingAddress.length < 26 || receivingAddress.length > 35) {
+                    alert('Invalid receiving address, please enter a valid one.');
+                    return false;
+                }
+
+                let re = /^[A-Z0-9]+$/i;
+                if (!re.test(receivingAddress)) {
+                    alert('Invalid receiving address, please enter a valid one.');
+                    return false;
+                }
+
+                var options = {
+                    method: 'POST',
+                    endpoint: 'Exchanges',
+                    body: JSON.stringify({ 'FromAddress': fundingAddress, 'ToAddress': receivingAddress })
+                };
+
+                _client.request(options, function (err, data) {
+                    if (!err) {
+                        if (data.fromAddress) {
+                            _tradeInfo = data;
+                            jQuery("#txtFundingAddress").val(data.fromAddress);
+                            jQuery("#imgFundingAddress").attr("src", "https://zxing.org/w/chart?cht=qr&chs=350x350&chld=L&choe=UTF-8&chl=" + data.fromAddress).attr("alt", data.fromAddress);
+                            jQuery('#dlgExchangeConfirm').modal('hide');
+                        }
+                    }
+                });
+            });
         }
     }
 
     function getLinkerFixedButtonLayout() {
-        return ['<a href="javascript:void(0);" class="_bcFixedButton">',
+        return ['<a class="_bcFixedButton" data-toggle="modal" data-target="#dlgExchangeConfirm">',
             '<span class="bcglyphicon bcglyphicon-btc" aria-hidden="true"></span>',
             '</a>'].join("");
     }
 
     function getSettingDialogLayout() {
-        return ['<div class="_bcmodal-content">',
-            '<div class="_bcmodal-header"><span class="_bcclose">&times;</span>',
-            '<h4>Transfer Confirmation</h4>',
+        return ['<div class="modal fade" id="dlgExchangeConfirm" tabindex="-1" role="dialog" aria-labelledby="dlgExchangeConfirmLabel" aria-hidden="true">',
+            '<div class="modal-dialog" role="document">',
+            '<div class="modal-content">',
+            '<div class="modal-header">',
+            '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>',
+            '<h5 class="modal-title" id="dlgExchangeConfirmLabel">Transfer Confirmation</h5>',
             '</div>',
-            '<div class="_bcmodal-body">',
-            '<p>Some text in the Modal Body</p>',
-            '<p>Some other text...<span class="bcglyphicon bcglyphicon-plus" aria-hidden="true"></span></p>',
+            '<div class="modal-body">',
+            '<form>',
+            '<fieldset>',
+            '<p>',
+            '<label for="txtFundingAddress">Fund the following Bitcoin address (BTC)</label>',
+            '<input type="text" id="txtFundingAddress" placeholder="BTC" readonly="readonly" class="form-control">',
+            '</p>',
+            '<p>',
+            '<img id="imgFundingAddress" width="200" height="200" title="Fund this Bitcoin address (BTC)"/>',
+            '</p>',
+            '<p>',
+            '<label for="txtReceivingAddress">Enter your receiving Betchip address (BTP)</label>',
+            '<input type="text" id="txtReceivingAddress" placeholder="BTP" class="form-control">',
+            '</p>',
+            '</fieldset>',
+            '</form>',
             '</div>',
-            '<div class="_bcmodal-footer">',
+            '<div class="modal-footer">',
+            '<button type="button" class="btn btn-default" id="btnConfirmTransfer">Submit</button>',
             '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>',
-            '<button type="button" class="btn btn-primary" id="btnConfirmTransfer"><i class="fas fa-exchange-alt"></i>Submit</button>',
+            '</div>',
+            '</div>',
             '</div>',
             '</div>'].join("");
     }
