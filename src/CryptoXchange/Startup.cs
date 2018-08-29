@@ -19,6 +19,7 @@ using CryptoXchange.Persistence.Postgres;
 using CryptoXchange.Persistence.Repositories;
 using CryptoXchange.Notifications;
 using System.Linq;
+using CryptoXchange.Middlewares;
 
 namespace CryptoXchange
 {
@@ -70,18 +71,6 @@ namespace CryptoXchange
             services.AddSingleton<PayoutManager>(payoutManager);
             services.RegisterServices();
 
-            // Add cors
-            //services.AddCors();
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AnyOrigin", builder =>
-                {
-                    builder
-                        .AllowAnyOrigin()
-                        .AllowAnyMethod();
-                });
-            });
-
             // Add framework services.
             services.AddMvc();
         }
@@ -90,7 +79,7 @@ namespace CryptoXchange
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             //https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-2.1#set-the-preflight-expiration-time
-            app.UseCors("AnyOrigin");
+            app.UseCorsMiddleware();
 
             if (env.IsDevelopment())
             {

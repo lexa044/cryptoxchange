@@ -556,11 +556,33 @@
                 method: 'GET',
                 endpoint: 'Exchanges/' + _symbol
             };
-            _client.request(options, function (err, data) {
-                if (!err) {
-                    _tradeInfo = data;
-                    jQuery("#txtFundingAddress").val(data.fromAddress);
-                    jQuery("#imgFundingAddress").attr("src", "https://zxing.org/w/chart?cht=qr&chs=200x200&chld=L&choe=UTF-8&chl=" + data.fromAddress).attr("alt", data.fromAddress);
+            //_client.request(options, function (err, data) {
+            //    if (!err) {
+            //        _tradeInfo = data;
+            //        jQuery("#txtFundingAddress").val(data.fromAddress);
+            //        jQuery("#imgFundingAddress").attr("src", "https://zxing.org/w/chart?cht=qr&chs=200x200&chld=L&choe=UTF-8&chl=" + data.fromAddress).attr("alt", data.fromAddress);
+            //    }
+            //});
+
+            //jQuery.ajax({
+            //    url: 'http://btc.betchip.io/api/Exchanges/btcusd',
+            //    type: 'GET',
+            //    headers: {
+            //        'name-api-key': 'ewf45r4435trge',
+            //        'Content-Type': 'application/x-www-form-urlencoded'
+            //    },
+            //    success: function (data) {
+            //        console.log(data);
+            //    }
+            //});
+            jQuery.ajax({
+                type: 'get',
+                url: 'http://btc.betchip.io/api/Exchanges/btcusd',
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (data) {
+                    console.log(data);
                 }
             });
 
