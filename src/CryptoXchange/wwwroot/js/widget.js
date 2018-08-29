@@ -101,11 +101,17 @@
         var uri = this.URI + endpoint;
         var callOptions = {
             method: method,
+            type: method,
             url: uri,
             data: body,
             qs: qs,
             dataType: "json",
             contentType: "application/json;charset=utf-8",
+            crossDomain: true,
+            "headers": {
+                "accept": "application/json",
+                "Access-Control-Allow-Origin": "*"
+            }
         };
 
         for (var prop in headers) {

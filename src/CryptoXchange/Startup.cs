@@ -74,11 +74,12 @@ namespace CryptoXchange
             //services.AddCors();
             services.AddCors(options =>
             {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials());
+                options.AddPolicy("AnyOrigin", builder =>
+                {
+                    builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod();
+                });
             });
 
             // Add framework services.
@@ -88,6 +89,9 @@ namespace CryptoXchange
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            //https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-2.1#set-the-preflight-expiration-time
+            app.UseCors("AnyOrigin");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -116,8 +120,6 @@ namespace CryptoXchange
             });
 
             app.UseStaticFiles();
-
-            app.UseCors("CorsPolicy");
 
             app.UseMvc(routes =>
             {
