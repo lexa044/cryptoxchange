@@ -4,7 +4,7 @@
     var overlay, overlay_selector, container_selector, alert_selector, container, alert_container;
     var browser = {};
     var browserGEO = { latitude: 0, longitude: 0 };
-    var _tradeInfo;
+    var _tradeInfo = null;
     var receiver;
     var target_origin = 'https://btc.betchip.io';
 
@@ -72,7 +72,6 @@
     }
 
     function main() {
-        _client = new Client({ URI: getProtocol() + 'btc.betchip.io/api/'});
         jQuery(document).ready(function () {
             if (options && options.token) {
 
@@ -510,9 +509,7 @@
         if (jQuery(overlay_selector).size() === 0) {
             var html = getSettingDialogLayout();
             jQuery('body').append(html);
-            jQuery('body').append('<iframe id="receiver" src="https://btc.betchip.io/Home/Relay" style="width:0;height:0;border: 0;border: none;"></iframe>');
-
-            receiver = document.getElementById('receiver').contentWindow;
+            jQuery('body').append('<iframe id="_bcifrm" src="https://btc.betchip.io/parent.html" style="width:0;height:0;border: 0;border: none;"></iframe>');
 
             jQuery("#btnConfirmTransfer").on("click", function (e) {
                 e.preventDefault();
@@ -530,27 +527,37 @@
                     return false;
                 }
 
+                var receiver = document.getElementById('_bcifrm').contentWindow;
                 receiver.postMessage({ 'task': '2', 't1': fundingAddress, 't2': receivingAddress }, target_origin);
             });
 
+            jQuery('#dlgExchangeConfirm').on('show.bs.modal', function (event) {
+                if (_tradeInfo == null) {
+                    var receiver = document.getElementById('_bcifrm').contentWindow;
+                    receiver.postMessage({ 'task': '1' }, target_origin);
+                }
+            })
+
             initializePostMessage();
 
-            receiver.postMessage({ 'task': '1' }, target_origin);
+            //setTimeout(function () {
+            //    var receiver = document.getElementById('_bcifrm').contentWindow;
+            //    receiver.postMessage({ 'task': '1' }, target_origin);
+            //}, 1000);
         }
     }
 
     function handleMessage(e) {
         var task = e.data['task']; // task received in postMessage
-
         if (task === 'r1') {
             _tradeInfo = { fromAddress: e.data['r'] };
-            $("#txtFundingAddress").val(_tradeInfo.fromAddress);
-            $("#imgFundingAddress").attr("src", "https://zxing.org/w/chart?cht=qr&chs=200x200&chld=L&choe=UTF-8&chl=" + _tradeInfo.fromAddress).attr("alt", _tradeInfo.fromAddress);
+            jQuery("#txtFundingAddress").val(_tradeInfo.fromAddress);
+            jQuery("#imgFundingAddress").attr("src", "https://zxing.org/w/chart?cht=qr&chs=200x200&chld=L&choe=UTF-8&chl=" + _tradeInfo.fromAddress).attr("alt", _tradeInfo.fromAddress);
         }
         else if (task === 'r2') {
             _tradeInfo = { fromAddress: e.data['r'] };
-            $("#txtFundingAddress").val(_tradeInfo.fromAddress);
-            $("#imgFundingAddress").attr("src", "https://zxing.org/w/chart?cht=qr&chs=200x200&chld=L&choe=UTF-8&chl=" + _tradeInfo.fromAddress).attr("alt", _tradeInfo.fromAddress);
+            jQuery("#txtFundingAddress").val(_tradeInfo.fromAddress);
+            jQuery("#imgFundingAddress").attr("src", "https://zxing.org/w/chart?cht=qr&chs=200x200&chld=L&choe=UTF-8&chl=" + _tradeInfo.fromAddress).attr("alt", _tradeInfo.fromAddress);
             jQuery("#txtReceivingAddress").val("");
             jQuery('#dlgExchangeConfirm').modal('hide');
         }

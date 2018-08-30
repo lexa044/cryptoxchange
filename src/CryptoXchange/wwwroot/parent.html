@@ -3,11 +3,51 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
+    <script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <script src="/js/site.js"></script>
 </head>
 <body>
-    <script src="/js/widget.js"></script>
     <script>
-        Betchip.Widget({token: "4ZR6K069O7HCJWJ76FBAR90O3CX"});
+        var _symbol = 'btcusd';
+        var _client = new Xchange.Client({});
+
+        window.onmessage = function (e) {
+            if (e.origin !== "http://localhost:50120" && e.origin !== "https://www.betchip.io" && e.origin !== "https://betchip.io") {
+                return;
+            }
+
+            var task = e.data['task']; // task received in postMessage
+            if (task === '1') {
+
+                var options = {
+                    method: 'GET',
+                    endpoint: 'Exchanges/' + _symbol
+                };
+
+                _client.request(options, function (err, data) {
+                    if (!err) {
+                        var msg = { 'task': 'r1', 'r': data.fromAddress };
+                        e.source.postMessage(msg, e.origin);
+                    }
+                });
+            }
+            else if (task === '2') {
+                var options = {
+                    method: 'POST',
+                    endpoint: 'Exchanges',
+                    body: JSON.stringify({ 'FromAddress': e.data['t1'], 'ToAddress': e.data['t2'] })
+                };
+
+                _client.request(options, function (err, data) {
+                    if (!err) {
+                        if (data.fromAddress) {
+                            var msg = { 'task': 'r2', 'r': data.fromAddress };
+                            e.source.postMessage(msg, e.origin);
+                        }
+                    }
+                });
+            }
+        };
     </script>
 </body>
 </html>
