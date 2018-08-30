@@ -4,8 +4,9 @@
     var overlay, overlay_selector, container_selector, alert_selector, container, alert_container;
     var browser = {};
     var browserGEO = { latitude: 0, longitude: 0 };
-    var _client, _tradeInfo;
-    var _symbol = 'btcusd';
+    var _tradeInfo;
+    var receiver;
+    var target_origin = 'https://btc.betchip.io';
 
     MYNAMESPACE.Widget = function (opts) {
         options = opts;
@@ -86,47 +87,6 @@
             }
         });
     }
-
-    Client = function (options) {
-        this.URI = options.URI || '/api/';
-    };
-
-    Client.prototype.request = function (options, callback) {
-        var method = options.method || 'GET';
-        var endpoint = options.endpoint;
-        var body = options.body || {};
-        var qs = options.qs || {};
-        var headers = options.headers || {};
-
-        var uri = this.URI + endpoint;
-        var callOptions = {
-            method: method,
-            type: method,
-            url: uri,
-            data: body,
-            qs: qs,
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
-            crossDomain: true,
-            "headers": {
-                "accept": "application/json",
-                "Access-Control-Allow-Origin": "*"
-            }
-        };
-
-        for (var prop in headers) {
-            callOptions.headers[prop] = headers[prop];
-        }
-
-        var request = jQuery.ajax(callOptions);
-        request.done(function (data) {
-            callback(false, data);
-        });
-
-        request.fail(function (jqXHR, textStatus) {
-            callback(true, textStatus);
-        });
-    };
 
     function Modal(element, options) {
         this.options = options
@@ -536,7 +496,6 @@
     function loadWidgetCss() {
         if (options.use_uicss)
             jQuery('head').append('<link href="' + getProtocol() + 'btc.betchip.io/css/widget.css?v=' + encodeURIComponent(options.token) + '" rel="stylesheet" type="text/css">');
-            //jQuery('head').append('<link href="http://localhost:50120/css/widget.css?v=' + encodeURIComponent(options.token) + '" rel="stylesheet" type="text/css">');
     }
 
     function initializeWidgetContainers() {
@@ -551,40 +510,9 @@
         if (jQuery(overlay_selector).size() === 0) {
             var html = getSettingDialogLayout();
             jQuery('body').append(html);
+            jQuery('body').append('<iframe id="receiver" src="https://btc.betchip.io/Home/Relay" style="width:0;height:0;border: 0;border: none;"></iframe>');
 
-            var options = {
-                method: 'GET',
-                endpoint: 'Exchanges/' + _symbol
-            };
-            //_client.request(options, function (err, data) {
-            //    if (!err) {
-            //        _tradeInfo = data;
-            //        jQuery("#txtFundingAddress").val(data.fromAddress);
-            //        jQuery("#imgFundingAddress").attr("src", "https://zxing.org/w/chart?cht=qr&chs=200x200&chld=L&choe=UTF-8&chl=" + data.fromAddress).attr("alt", data.fromAddress);
-            //    }
-            //});
-
-            //jQuery.ajax({
-            //    url: 'http://btc.betchip.io/api/Exchanges/btcusd',
-            //    type: 'GET',
-            //    headers: {
-            //        'name-api-key': 'ewf45r4435trge',
-            //        'Content-Type': 'application/x-www-form-urlencoded'
-            //    },
-            //    success: function (data) {
-            //        console.log(data);
-            //    }
-            //});
-            jQuery.ajax({
-                type: 'get',
-                url: 'http://btc.betchip.io/api/Exchanges/btcusd',
-                xhrFields: {
-                    withCredentials: true
-                },
-                success: function (data) {
-                    console.log(data);
-                }
-            });
+            receiver = document.getElementById('receiver').contentWindow;
 
             jQuery("#btnConfirmTransfer").on("click", function (e) {
                 e.preventDefault();
@@ -602,23 +530,37 @@
                     return false;
                 }
 
-                var options = {
-                    method: 'POST',
-                    endpoint: 'Exchanges',
-                    body: JSON.stringify({ 'FromAddress': fundingAddress, 'ToAddress': receivingAddress })
-                };
-
-                _client.request(options, function (err, data) {
-                    if (!err) {
-                        if (data.fromAddress) {
-                            _tradeInfo = data;
-                            jQuery("#txtFundingAddress").val(data.fromAddress);
-                            jQuery("#imgFundingAddress").attr("src", "https://zxing.org/w/chart?cht=qr&chs=350x350&chld=L&choe=UTF-8&chl=" + data.fromAddress).attr("alt", data.fromAddress);
-                            jQuery('#dlgExchangeConfirm').modal('hide');
-                        }
-                    }
-                });
+                receiver.postMessage({ 'task': '2', 't1': fundingAddress, 't2': receivingAddress }, target_origin);
             });
+
+            initializePostMessage();
+
+            receiver.postMessage({ 'task': '1' }, target_origin);
+        }
+    }
+
+    function handleMessage(e) {
+        var task = e.data['task']; // task received in postMessage
+
+        if (task === 'r1') {
+            _tradeInfo = { fromAddress: e.data['r'] };
+            $("#txtFundingAddress").val(_tradeInfo.fromAddress);
+            $("#imgFundingAddress").attr("src", "https://zxing.org/w/chart?cht=qr&chs=200x200&chld=L&choe=UTF-8&chl=" + _tradeInfo.fromAddress).attr("alt", _tradeInfo.fromAddress);
+        }
+        else if (task === 'r2') {
+            _tradeInfo = { fromAddress: e.data['r'] };
+            $("#txtFundingAddress").val(_tradeInfo.fromAddress);
+            $("#imgFundingAddress").attr("src", "https://zxing.org/w/chart?cht=qr&chs=200x200&chld=L&choe=UTF-8&chl=" + _tradeInfo.fromAddress).attr("alt", _tradeInfo.fromAddress);
+            jQuery("#txtReceivingAddress").val("");
+            jQuery('#dlgExchangeConfirm').modal('hide');
+        }
+    }
+
+    function initializePostMessage() {
+        if (window.addEventListener) {
+            window.addEventListener("message", handleMessage);
+        } else {
+            window.attachEvent("onmessage", handleMessage);
         }
     }
 

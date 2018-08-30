@@ -79,7 +79,7 @@ namespace CryptoXchange
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             //https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-2.1#set-the-preflight-expiration-time
-            app.UseCorsMiddleware();
+            //app.UseCorsMiddleware();
 
             if (env.IsDevelopment())
             {

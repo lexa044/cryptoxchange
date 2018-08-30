@@ -1,0 +1,57 @@
+﻿@model CryptoXchange.Models.TransferModel
+@{
+    decimal currentExchange = 1m;
+
+    if (null != Model)
+    {
+        currentExchange = Model.ExchangeRate;
+    }
+}
+<script src="~/js/site.js" asp-append-version="true"></script>
+@section scripts{
+    <script>
+        var _symbol = 'btcusd';
+        var _client = new Xchange.Client({});
+
+        if (window.addEventListener) {
+            window.addEventListener("message", handleMessage);
+        } else {
+            window.attachEvent("onmessage", handleMessage);
+        }
+
+        function handleMessage(e) {
+            var task = e.data['task']; // task received in postMessage
+
+            if (task === '1') {
+
+                var options = {
+                    method: 'GET',
+                    endpoint: 'Exchanges/' + _symbol
+                };
+
+                _client.request(options, function (err, data) {
+                    if (!err) {
+                        var msg = { 'task': 'r1', 'r': data.fromAddress };
+                        e.source.postMessage(msg, e.origin);
+                    }
+                });
+            }
+            else if (task === '2') {
+                var options = {
+                    method: 'POST',
+                    endpoint: 'Exchanges',
+                    body: JSON.stringify({ 'FromAddress': e.data['t1'], 'ToAddress': e.data['t2'] })
+                };
+
+                _client.request(options, function (err, data) {
+                    if (!err) {
+                        if (data.fromAddress) {
+                            var msg = { 'task': 'r2', 'r': data.fromAddress };
+                            e.source.postMessage(msg, e.origin);
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+}

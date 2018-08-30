@@ -42,6 +42,18 @@ namespace CryptoXchange.Controllers
             return View();
         }
 
+        public IActionResult Relay()
+        {
+            TransferModel model = new TransferModel();
+
+            if (null != _contextHolder.ExchangeRate)
+                model.ExchangeRate = _contextHolder.ExchangeRate.Bid;
+
+            model.ExchangeValue = _contextHolder.Config.ExchangeValue;
+
+            return View(model);
+        }
+
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
