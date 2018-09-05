@@ -73,6 +73,8 @@ var ExchangeService = function () {
         _client.request(options, function (err, data) {
             if (!err) {
                 _tradeInfo = data;
+                _exchange = data.exchangeRate;
+
                 $("#txtFundingAddress").val(data.fromAddress);
                 $("#imgFundingAddress").attr("src", "https://zxing.org/w/chart?cht=qr&chs=200x200&chld=L&choe=UTF-8&chl=" + data.fromAddress).attr("alt", data.fromAddress);
             }

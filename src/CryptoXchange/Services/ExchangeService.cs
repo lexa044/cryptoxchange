@@ -80,6 +80,8 @@ namespace CryptoXchange.Services
 
                 TransferModel response = new TransferModel();
                 response.FromAddress = btcAddress;
+                if (null != _contextHolder.ExchangeRate)
+                    response.ExchangeRate = _contextHolder.ExchangeRate.Bid;
 
                 return response;
             };

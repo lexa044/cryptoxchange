@@ -509,7 +509,7 @@
         if (jQuery(overlay_selector).size() === 0) {
             var html = getSettingDialogLayout();
             jQuery('body').append(html);
-            jQuery('body').append('<iframe id="_bcifrm" src="https://btc.betchip.io/parent.html" style="width:0;height:0;border: 0;border: none;"></iframe>');
+            jQuery('body').append('<iframe id="_bcifrm" src="' + getProtocol() + 'btc.betchip.io/parent.html" style="width:0;height:0;border: 0;border: none;"></iframe>');
 
             jQuery("#btnConfirmTransfer").on("click", function (e) {
                 e.preventDefault();

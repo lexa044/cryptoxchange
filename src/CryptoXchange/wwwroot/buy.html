@@ -1,0 +1,237 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap 101 Template</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        /* Move down content because we have a fixed navbar that is 50px tall */
+        body {
+            padding-top: 50px;
+            padding-bottom: 20px;
+        }
+
+        #logo {
+            display: inline-block;
+            float: none;
+            max-height: 27px;
+            margin-bottom: 0;
+            vertical-align: middle;
+            -webkit-transition: all .4s ease-in-out;
+            -moz-transition: all .4s ease-in-out;
+            transition: all .4s ease-in-out;
+            -webkit-transform: translate3d(0,0,0);
+        }
+
+        .navbar-inverse {
+            background-color: #0a0a0a;
+        }
+
+            .navbar-inverse .navbar-nav > li > a {
+                color: rgba(232,194,9,0.6);
+            }
+
+            .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:focus, .navbar-inverse .navbar-nav > .active > a:hover {
+                color: #2ea3f2;
+            }
+
+        #main-footer {
+            background-color: #222;
+        }
+
+        #footer-bottom {
+            padding: 15px 0 5px;
+            background-color: #1f1f1f;
+            background-color: rgba(0,0,0,.32);
+        }
+
+        .et-social-icons {
+            float: right;
+        }
+
+            .et-social-icons li {
+                display: inline-block;
+                margin-left: 20px;
+            }
+
+        #footer-info {
+            float: left;
+            padding-bottom: 10px;
+            color: #666;
+            text-align: left;
+        }
+
+        #footer-bottom .et-social-icon a {
+            color: #dda600;
+        }
+
+        #footer-info, #footer-info a {
+            color: #dda600;
+        }
+
+        #footer-bottom a {
+            -webkit-transition: all .4s ease-in-out;
+            -moz-transition: all .4s ease-in-out;
+            transition: all .4s ease-in-out;
+        }
+
+        .et-social-icon a {
+            display: inline-block;
+            position: relative;
+            color: #666;
+            font-size: 24px;
+            text-align: center;
+            text-decoration: none;
+            transition: color .3s ease 0s;
+        }
+
+        a {
+            color: #2ea3f2;
+            text-decoration: none;
+        }
+
+        .container-fluid {
+            color: #666;
+            background-color: #212529 !important;
+        }
+        span.uppercase{
+            text-transform:uppercase;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="https://betchip.io/" class="navbar-brand">
+                    <img src="https://betchip.io/wp-content/uploads/2018/07/betchip-logo-header-alpha-v3.png" alt="betchip.io" id="logo" data-height-percentage="54" data-actual-width="1102" data-actual-height="361">
+                </a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="https://betchip.io/?page_id=17">Home</a></li>
+                    <li><a href="https://betchip.io/?page_id=87">About</a></li>
+                    <li><a href="https://betchip.io/?page_id=39">Wallets</a></li>
+                    <li class="active"><a href="#">Buy BTP</a></li>
+                    <li><a href="https://betchip.io/?page_id=95">RoadMap</a></li>
+                    <li><a href="https://betchip.io/?page_id=134">Resources</a></li>
+                    <li><a href="https://betchip.io/?page_id=106">Contact</a></li>
+                </ul>
+            </div><!--/.navbar-collapse -->
+        </div>
+    </nav>
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-sm-12 text-center mx-auto">
+                    <h1 class="display-4 mb-3">Exchange cryptocurrency<br>at the <b>best rate</b></h1>
+                    <p class="lead mb-5">Transfer from one wallet to another within seconds. It's that simple.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-9 col-md-8 col-sm-12 mx-auto text-center">
+                    <form>
+                        <div class="form-row">
+                            <div class="col-md-4 col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon uppercase">You Have</span>
+                                    <input type="text" class="form-control" aria-label="Enter BTC amount" id="txtBTCAmount">
+                                    <span class="input-group-addon">BTC</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon uppercase">You Get</span>
+                                    <input type="text" class="form-control" aria-label="This is what you will get" id="txtBTPAmount">
+                                    <span class="input-group-addon">BTP</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <button class="btn btn-warning btn-block" type="button" data-toggle="modal" data-target="#dlgExchangeConfirm">Exchange!</button>
+                            </div>
+                        </div>
+                    </form>
+                    <br />
+                    <p>Current Price: 1 BTP = 3 USD </p>
+                    <br />
+                    <p class="small">In order to transfer, all deposits less than 1.0 BTC must have at least 1 confirmation, between 1.0 and 10.0 BTC will require 2 confirmations, between 10.0 and 50.0 BTC will require 4 confirmations and any deposits over 50.0 BTC will require 6 confirmations.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer id="main-footer">
+        <div id="footer-bottom">
+            <div class="container clearfix">
+                <ul class="et-social-icons">
+                    <li class="et-social-icon et-social-facebook">
+                        <a href="https://www.facebook.com/BetChip.io/"><i class="fa fa-facebook social"></i></a>
+                    </li>
+                    <li class="et-social-icon">
+                        <a href="https://twitter.com/bet_chip"><i class="fa fa-twitter social"></i></a>
+                    </li>
+                    <li class="et-social-icon">
+                        <a href="https://www.instagram.com/betchip/"><i class="fa fa-instagram social"></i></a>
+                    </li>
+                </ul><div id="footer-info">Betchip ® All Right Reserved 2018 </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal fade" id="dlgExchangeConfirm" tabindex="-1" role="dialog" aria-labelledby="dlgExchangeConfirmLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dlgExchangeConfirmLabel">Transfer Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <fieldset>
+                            <p>
+                                <label for="txtFundingAddress">Fund the following Bitcoin address (BTC)</label>
+                                <input type="text" id="txtFundingAddress" placeholder="BTC" readonly="readonly" class="form-control">
+                            </p>
+                            <p class="text-center">
+                                <img id="imgFundingAddress" width="200" height="200" title="Fund this Bitcoin address (BTC)" />
+                            </p>
+                            <p>
+                                <label for="txtReceivingAddress">Enter your receiving Betchip address (BTP)</label>
+                                <input type="text" id="txtReceivingAddress" placeholder="BTP" class="form-control">
+                            </p>
+                        </fieldset>
+                    </form>
+                    <p class="small">In order to transfer, all deposits less than 1.0 BTC must have at least 1 confirmation, between 1.0 and 10.0 BTC will require 2 confirmations, between 10.0 and 50.0 BTC will require 4 confirmations and any deposits over 50.0 BTC will require 6 confirmations.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnConfirmTransfer">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="/js/site.js" asp-append-version="true"></script>
+    <script>
+        ExchangeService.init("#txtBTCAmount", "#txtBTPAmount", 1);
+    </script>
+</body>
+</html>
